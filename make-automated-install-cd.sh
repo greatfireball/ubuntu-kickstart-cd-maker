@@ -3,9 +3,17 @@
 # edit these 3 variables if you want to try another distro. create an md5sum
 # file with something like 
 #   md5sum $ISO > $ISO.MD5SUM
-ISO=ubuntu-12.04.3-server-amd64.iso
-OUTPUT=autoinstall-ubuntu-12.04.3-server-amd64.iso
-URL=http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso
+#ISO=ubuntu-12.04.3-server-amd64.iso
+#OUTPUT=autoinstall-ubuntu-12.04.3-server-amd64.iso
+#URL=http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso
+
+ISO=mini.iso
+OUTPUT=autoinstall-mini.iso
+URL=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/mini.iso
+
+# ISO=ubuntu-14.04.2-server-amd64.iso
+# OUTPUT=autoinstall-ubuntu-14.04.2-server-amd64.iso
+# URL=http://releases.ubuntu.com/14.04.2/ubuntu-14.04.2-server-amd64.iso
 
 MOUNT=iso-mount-dir
 WORK=iso-work-dir
@@ -36,11 +44,16 @@ chmod -R a+w $WORK
 
 # copy files over to image
 cp ks.cfg $WORK/
-cp txt.cfg $WORK/isolinux/
-cp isolinux.cfg $WORK/isolinux/
+cp txt.cfg $WORK/
+cp isolinux.cfg $WORK
+cp -R preseed $WORK/
+
+#cp txt.cfg $WORK/isolinux/
+#cp isolinux.cfg $WORK/isolinux/
 
 # magic mkiso incantation
-mkisofs -D -r -V “AUTOINSTALL” -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $OUTPUT $WORK
+#mkisofs -D -r -V “AUTOINSTALL” -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $OUTPUT $WORK
+mkisofs -D -r -V “AUTOINSTALL” -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $OUTPUT $WORK
 
 # clean up after ourselves
 sudo umount $MOUNT
